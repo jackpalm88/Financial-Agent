@@ -1,0 +1,45 @@
+{
+  "comment": "MT5 Bridge Hybrid v2.0 - Configuration Template",
+  
+  "mt5": {
+    "comment": "Real MT5 adapter configuration",
+    "login": 12345678,
+    "password": "your_mt5_password",
+    "server": "YourBroker-Demo",
+    "timeout": 60000,
+    "path": ""
+  },
+  
+  "bridge": {
+    "comment": "Bridge behavior settings",
+    "max_spread_points": 30,
+    "deviation": 10,
+    "magic_number": 20251027,
+    "async_mode": true
+  },
+  
+  "mock": {
+    "comment": "Mock adapter configuration for testing",
+    "success_rate": 0.95,
+    "latency_ms": 50.0,
+    "slippage_pips": 1.0,
+    "simulate_errors": false,
+    "error_rate": 0.05
+  },
+  
+  "validation": {
+    "comment": "Signal validation rules",
+    "min_confidence": 0.6,
+    "min_lot_size": 0.01,
+    "max_lot_size": 10.0,
+    "allowed_symbols": ["EURUSD", "GBPUSD", "USDJPY", "AUDUSD"],
+    "max_spread_points": 30
+  },
+  
+  "risk_management": {
+    "comment": "Risk limits",
+    "max_daily_loss_pct": 5.0,
+    "max_position_size_pct": 2.0,
+    "max_concurrent_orders": 5
+  }
+}
