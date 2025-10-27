@@ -1,0 +1,44 @@
+# Financial Agent - Global Dependencies
+
+# ===== Core Trading =====
+MetaTrader5>=5.0.45              # MT5 Python API
+
+# ===== Data Processing =====
+numpy>=1.24.0                    # Numerical computing
+pandas>=2.0.0                    # Data manipulation
+python-dateutil>=2.8.2           # Date/time utilities
+
+# ===== Technical Analysis =====
+ta-lib>=0.4.0                    # Technical indicators (optional: needs C library)
+pandas-ta>=0.3.14b0              # Pure Python indicators (fallback)
+
+# ===== NLP & Sentiment =====
+transformers>=4.30.0             # HuggingFace models
+torch>=2.0.0                     # PyTorch (for transformers)
+sentencepiece>=0.1.99            # Tokenization
+
+# ===== Testing =====
+pytest>=7.4.0                    # Unit testing
+pytest-asyncio>=0.21.0           # Async test support
+pytest-cov>=4.1.0                # Code coverage
+pytest-mock>=3.11.1              # Mocking utilities
+
+# ===== Code Quality =====
+black>=23.7.0                    # Code formatting
+flake8>=6.1.0                    # Linting
+mypy>=1.5.0                      # Type checking
+isort>=5.12.0                    # Import sorting
+
+# ===== Utilities =====
+pydantic>=2.0.0                  # Data validation
+python-dotenv>=1.0.0             # Environment variables
+loguru>=0.7.0                    # Better logging
+tenacity>=8.2.0                  # Retry logic
+
+# ===== Optional: Monitoring =====
+prometheus-client>=0.17.0        # Metrics export
+sentry-sdk>=1.28.0               # Error tracking
+
+# ===== Development =====
+ipython>=8.14.0                  # Interactive shell
+jupyter>=1.0.0                   # Notebooks (optional)
