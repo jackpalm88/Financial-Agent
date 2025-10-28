@@ -26,5 +26,8 @@ jobs:
           if [ -f pyproject.toml ]; then pip install .; fi
 
       - name: Run tests
+        env:
+          PYTHONPATH: src
+          PYTEST_ADDOPTS: --override-ini addopts=
         run: |
-          if [ -d tests ]; then pytest -q; else echo "No tests folder found"; fi
+          pytest -q
