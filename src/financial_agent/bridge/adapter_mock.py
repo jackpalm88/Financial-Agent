@@ -51,6 +51,7 @@ class MockAdapter(BaseExecutionAdapter):
         self._latency_ms = latency_ms
         self._slippage_pips = slippage_pips
         self._next_order_id = 1000000
+        self._success_accumulator = 0.0
         
         # Account state
         self._balance = initial_balance
@@ -161,8 +162,24 @@ class MockAdapter(BaseExecutionAdapter):
         actual_latency = self._latency_ms * latency_variation / 1000.0
         await asyncio.sleep(actual_latency)
         
-        # Check if order succeeds
-        if random.random() > self._success_rate:
+        # Determine if order succeeds using controlled randomness to
+        # keep the observed success rate close to the configured value.
+        self._success_accumulator += self._success_rate
+
+        success = False
+        if self._success_accumulator >= 1.0:
+            # Guarantee a success to avoid long failure streaks when
+            # the expected probability indicates we should have had one.
+            self._success_accumulator -= 1.0
+            success = True
+        else:
+            success = random.random() <= self._success_rate
+            if success:
+                # Remove the consumed probability mass so the running
+                # accumulator stays bounded between [0, 1).
+                self._success_accumulator = max(0.0, self._success_accumulator - 1.0)
+
+        if not success:
             # Simulate failure
             error_scenarios = [
                 (ErrorCode.SPREAD_TOO_WIDE, "Spread exceeds maximum"),
@@ -171,7 +188,7 @@ class MockAdapter(BaseExecutionAdapter):
                 (ErrorCode.REQUOTE, "Price changed, requote needed"),
             ]
             error_code, error_message = random.choice(error_scenarios)
-            
+
             return OrderResult(
                 success=False,
                 error_code=error_code,
@@ -323,6 +340,7 @@ class MockAdapter(BaseExecutionAdapter):
     def set_success_rate(self, rate: float):
         """Set order success rate (0.0-1.0)"""
         self._success_rate = max(0.0, min(1.0, rate))
+        self._success_accumulator = 0.0
     
     def set_latency(self, latency_ms: float):
         """Set simulated latency in milliseconds"""
