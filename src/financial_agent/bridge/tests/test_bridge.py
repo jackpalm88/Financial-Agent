@@ -1,24 +1,17 @@
-"""
-Unit Tests for MT5 Bridge Hybrid
-Tests using MockAdapter - no MT5 connection required
-"""
+"""Unit tests for the MT5 execution bridge using the mock adapter."""
 
 import asyncio
 
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 import pytest
 
-from core import (
+from financial_agent.bridge import (
     MT5ExecutionBridge,
     AsyncExecutionEngine,
     MockAdapter,
     Signal,
     OrderDirection,
     ExecutionStatus,
-    ErrorCode
+    ErrorCode,
 )
 
 

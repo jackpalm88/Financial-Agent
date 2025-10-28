@@ -1,23 +1,21 @@
-"""
-MT5 Bridge Hybrid - Usage Examples
-Demonstrates adapter pattern with Mock and Real MT5 adapters
-"""
+"""Usage examples for the MT5 bridge with the mock adapter."""
 
 import asyncio
 import json
-import sys
 import os
+import sys
 
-# Add parent directory to path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+PROJECT_SRC = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src"))
+if PROJECT_SRC not in sys.path:
+    sys.path.insert(0, PROJECT_SRC)
 
-from core import (
+from financial_agent.bridge import (
     MT5ExecutionBridge,
     AsyncExecutionEngine,
     MockAdapter,
     RealMT5Adapter,
     Signal,
-    OrderDirection
+    OrderDirection,
 )
 
 
