@@ -1,99 +1,98 @@
-"""
-MT5 Bridge Hybrid v2.0 - Core Module
+"""Public entry-point for the MT5 execution bridge."""
 
-Production-ready execution bridge with Adapter Pattern.
-Swap execution providers (MT5, IBKR, Binance, etc.) without changing bridge code.
-"""
+from __future__ import annotations
 
-# Adapter Base (Interface + Error Codes)
-from .adapter_base import (
-    BaseExecutionAdapter,
-    ErrorCode,
-    SymbolInfo,
-    OrderRequest,
-    OrderResult,
-    AccountInfo,
-    PositionInfo
-)
-
-# Concrete Adapters
-from .adapter_mock import MockAdapter
-
-# RealMT5Adapter is optional (requires MetaTrader5 package)
-try:
-    from .adapter_mt5 import RealMT5Adapter
-    _HAS_MT5 = True
-except ImportError:
-    RealMT5Adapter = None
-    _HAS_MT5 = False
-
-# Bridge
-from .bridge import (
-    MT5ExecutionBridge,
-    Signal,
-    OrderDirection,
-    ExecutionResult,
-    ExecutionStatus,
-)
-
-# The asynchronous execution engine lives in ``bridge`` alongside the core
-# implementation.  Import it lazily so that importing ``financial_agent.bridge``
-# doesn't immediately construct any event loops or pull in optional
-# dependencies.  This mirrors the pattern recommended in the incident report
-# and keeps the public API stable.
 from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:  # pragma: no cover - type-checking only
-    from .bridge import AsyncExecutionEngine
+__version__ = "2.0.0"
 
-# Version
-__version__ = '2.0.0'
-
-# Export all public APIs
 __all__ = [
-    # Adapters
-    'BaseExecutionAdapter',
-    'MockAdapter',
-    'RealMT5Adapter',
-    
-    # Bridge
-    'MT5ExecutionBridge',
-    'AsyncExecutionEngine',
-
-    # Data Structures
-    'Signal',
-    'OrderDirection',
-    'OrderRequest',
-    'OrderResult',
-    'SymbolInfo',
-    'AccountInfo',
-    'PositionInfo',
-    'ExecutionResult',
-    'ExecutionStatus',
-    
-    # Error Handling
-    'ErrorCode',
-    
-    # Version
-    '__version__'
+    "MT5ExecutionBridge",
+    "AsyncExecutionEngine",
+    "MockAdapter",
+    "RealMT5Adapter",
+    "Signal",
+    "OrderDirection",
+    "ExecutionResult",
+    "ExecutionStatus",
+    "BaseExecutionAdapter",
+    "ErrorCode",
+    "OrderRequest",
+    "OrderResult",
+    "SymbolInfo",
+    "AccountInfo",
+    "PositionInfo",
+    "__version__",
 ]
 
+if TYPE_CHECKING:  # pragma: no cover - import heavy modules only for type checkers
+    from .adapter_base import (
+        AccountInfo,
+        BaseExecutionAdapter,
+        ErrorCode,
+        OrderRequest,
+        OrderResult,
+        PositionInfo,
+        SymbolInfo,
+    )
+    from .adapter_mock import MockAdapter
+    from .adapter_mt5 import RealMT5Adapter
+    from .bridge import (
+        AsyncExecutionEngine,
+        ExecutionResult,
+        ExecutionStatus,
+        MT5ExecutionBridge,
+        OrderDirection,
+        Signal,
+    )
 
-def __getattr__(name):
-    """Provide lazy access to heavy bridge helpers.
 
-    The ``AsyncExecutionEngine`` is only needed by consumers that want the
-    background execution helper.  Keeping its import here prevents unnecessary
-    initialization during test discovery while still satisfying
-    ``from financial_agent.bridge import AsyncExecutionEngine``.
-    """
+def __getattr__(name: str):
+    """Lazily expose bridge symbols to avoid importing optional dependencies."""
 
-    if name == 'AsyncExecutionEngine':
-        from .bridge import AsyncExecutionEngine as _AsyncExecutionEngine
+    if name in {
+        "MT5ExecutionBridge",
+        "Signal",
+        "OrderDirection",
+        "ExecutionResult",
+        "ExecutionStatus",
+        "AsyncExecutionEngine",
+    }:
+        from . import bridge as _bridge
 
-        return _AsyncExecutionEngine
+        return getattr(_bridge, name)
+
+    if name in {
+        "BaseExecutionAdapter",
+        "ErrorCode",
+        "OrderRequest",
+        "OrderResult",
+        "SymbolInfo",
+        "AccountInfo",
+        "PositionInfo",
+    }:
+        from . import adapter_base as _adapter_base
+
+        return getattr(_adapter_base, name)
+
+    if name == "MockAdapter":
+        from .adapter_mock import MockAdapter
+
+        return MockAdapter
+
+    if name == "RealMT5Adapter":
+        try:
+            from .adapter_mt5 import RealMT5Adapter
+        except ImportError as exc:  # pragma: no cover - depends on optional package
+            raise AttributeError(name) from exc
+
+        return RealMT5Adapter
+
+    if name == "__version__":
+        return __version__
+
     raise AttributeError(name)
 
 
-def __dir__():
+def __dir__() -> list[str]:
     return sorted(__all__)

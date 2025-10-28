@@ -2,6 +2,7 @@
 
 import asyncio
 
+import financial_agent
 import pytest
 
 from financial_agent.bridge import (
@@ -13,6 +14,19 @@ from financial_agent.bridge import (
     ExecutionStatus,
     ErrorCode,
 )
+
+
+# ========== PACKAGE INSTALLATION SMOKE TEST ==========
+
+
+def test_import_origin():
+    """Ensure the bridge is imported from the installed package."""
+
+    package_path = financial_agent.__file__
+    assert any(
+        marker in package_path
+        for marker in ("site-packages", "dist-packages", "_work", "workspace")
+    ), package_path
 
 
 # ========== FIXTURES ==========

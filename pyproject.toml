@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
+requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -44,20 +44,6 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["src", "tests"]
 python_files = ["test_*.py"]
-python_classes = ["Test*"]
-python_functions = ["test_*"]
-addopts = [
-    "-v",
-    "--strict-markers",
-    "--cov=src/financial_agent",
-    "--cov-report=term-missing",
-    "--cov-report=html",
-]
-markers = [
-    "unit: Unit tests (fast, no external dependencies)",
-    "integration: Integration tests (may require MT5)",
-    "slow: Slow tests (>1s execution time)",
-]
 
 [tool.coverage.run]
 source = ["src/financial_agent"]
