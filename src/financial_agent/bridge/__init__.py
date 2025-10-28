@@ -30,6 +30,7 @@ except ImportError:
 # Bridge
 from .bridge import (
     MT5ExecutionBridge,
+    AsyncExecutionEngine,
     Signal,
     OrderDirection,
     ExecutionResult,
@@ -48,7 +49,8 @@ __all__ = [
     
     # Bridge
     'MT5ExecutionBridge',
-    
+    'AsyncExecutionEngine',
+
     # Data Structures
     'Signal',
     'OrderDirection',

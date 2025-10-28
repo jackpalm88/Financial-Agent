@@ -1,7 +1,7 @@
 # Financial Agent - Global Dependencies
 
 # ===== Core Trading =====
-MetaTrader5>=5.0.45              # MT5 Python API
+MetaTrader5>=5.0.45 ; platform_system == "Windows"              # MT5 Python API (official support on Windows)
 
 # ===== Data Processing =====
 numpy>=1.24.0                    # Numerical computing
@@ -9,7 +9,7 @@ pandas>=2.0.0                    # Data manipulation
 python-dateutil>=2.8.2           # Date/time utilities
 
 # ===== Technical Analysis =====
-ta-lib>=0.4.0                    # Technical indicators (optional: needs C library)
+ta-lib>=0.4.0 ; platform_system == "Windows"                    # Technical indicators (requires native libs; skip on CI)
 pandas-ta>=0.3.14b0              # Pure Python indicators (fallback)
 
 # ===== NLP & Sentiment =====
