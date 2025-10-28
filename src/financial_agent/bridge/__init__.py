@@ -36,8 +36,15 @@ from .bridge import (
     ExecutionStatus,
 )
 
-# Background execution helper
-from .bridge import AsyncExecutionEngine
+# The asynchronous execution engine lives in ``bridge`` alongside the core
+# implementation.  Import it lazily so that importing ``financial_agent.bridge``
+# doesn't immediately construct any event loops or pull in optional
+# dependencies.  This mirrors the pattern recommended in the incident report
+# and keeps the public API stable.
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:  # pragma: no cover - type-checking only
+    from .bridge import AsyncExecutionEngine
 
 # Version
 __version__ = '2.0.0'
@@ -70,3 +77,23 @@ __all__ = [
     # Version
     '__version__'
 ]
+
+
+def __getattr__(name):
+    """Provide lazy access to heavy bridge helpers.
+
+    The ``AsyncExecutionEngine`` is only needed by consumers that want the
+    background execution helper.  Keeping its import here prevents unnecessary
+    initialization during test discovery while still satisfying
+    ``from financial_agent.bridge import AsyncExecutionEngine``.
+    """
+
+    if name == 'AsyncExecutionEngine':
+        from .bridge import AsyncExecutionEngine as _AsyncExecutionEngine
+
+        return _AsyncExecutionEngine
+    raise AttributeError(name)
+
+
+def __dir__():
+    return sorted(__all__)
