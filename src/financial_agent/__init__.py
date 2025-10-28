@@ -17,12 +17,12 @@ Components:
 
 Example:
     >>> from financial_agent.bridge import MT5ExecutionBridge, MockAdapter
-    >>> 
+    >>>
     >>> # Test without MT5
     >>> adapter = MockAdapter(success_rate=0.95)
     >>> await adapter.connect()
     >>> bridge = MT5ExecutionBridge(adapter=adapter)
-    >>> 
+    >>>
     >>> # Execute signal
     >>> result = await bridge.execute_order(signal_id, signal)
 """
