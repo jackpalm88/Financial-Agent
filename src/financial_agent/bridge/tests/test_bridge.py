@@ -4,6 +4,7 @@ Tests using MockAdapter - no MT5 connection required
 """
 
 import pytest
+import pytest_asyncio
 import asyncio
 from datetime import datetime
 
@@ -31,7 +32,7 @@ def mock_adapter():
     return adapter
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def connected_adapter(mock_adapter):
     """Create and connect mock adapter"""
     await mock_adapter.connect()

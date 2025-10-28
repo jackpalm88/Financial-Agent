@@ -316,8 +316,11 @@ class MT5ExecutionBridge:
                     error_code=ErrorCode.SUCCESS
                 )
                 
-                logger.info(f"Signal {signal_id} executed: Order={order_result.order_id}, "
-                          f"Fill={order_result.fill_price}, Slippage={slippage_pips:.2f if slippage_pips else 0} pips")
+                slippage_display = f"{slippage_pips:.2f}" if slippage_pips is not None else "0.00"
+                logger.info(
+                    f"Signal {signal_id} executed: Order={order_result.order_id}, "
+                    f"Fill={order_result.fill_price}, Slippage={slippage_display} pips"
+                )
             else:
                 exec_result = ExecutionResult(
                     success=False,
