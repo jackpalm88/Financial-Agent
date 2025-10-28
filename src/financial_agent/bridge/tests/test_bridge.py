@@ -7,11 +7,7 @@ import pytest
 import asyncio
 from datetime import datetime
 
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from core import (
+from financial_agent.bridge import (
     MT5ExecutionBridge,
     AsyncExecutionEngine,
     MockAdapter,
