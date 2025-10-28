@@ -30,12 +30,14 @@ except ImportError:
 # Bridge
 from .bridge import (
     MT5ExecutionBridge,
-    AsyncExecutionEngine,
     Signal,
     OrderDirection,
     ExecutionResult,
-    ExecutionStatus
+    ExecutionStatus,
 )
+
+# Background execution helper
+from .bridge import AsyncExecutionEngine
 
 # Version
 __version__ = '2.0.0'
