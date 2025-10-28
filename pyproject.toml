@@ -24,11 +24,22 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
 ]
 
+[project.optional-dependencies]
+ci = [
+    "coverage",
+    "pytest",
+    "pytest-asyncio",
+    "pytest-mock",
+]
+
 [project.urls]
 Homepage = "https://github.com/yourusername/financial-agent"
 Repository = "https://github.com/yourusername/financial-agent"
 Documentation = "https://github.com/yourusername/financial-agent/wiki"
 "Bug Tracker" = "https://github.com/yourusername/financial-agent/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["src", "tests"]

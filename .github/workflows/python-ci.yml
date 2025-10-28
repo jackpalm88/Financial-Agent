@@ -23,11 +23,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          if [ -f pyproject.toml ]; then pip install .; fi
+          pip install -e ".[ci]" || pip install -e .
 
       - name: Run tests
         env:
-          PYTHONPATH: src
           PYTEST_ADDOPTS: --override-ini addopts=
-        run: |
-          pytest -q
+        run: pytest -q
